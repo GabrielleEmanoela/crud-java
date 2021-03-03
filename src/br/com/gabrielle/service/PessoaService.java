@@ -3,18 +3,17 @@ package br.com.gabrielle.service;
 import br.com.gabrielle.dao.PessoaDAO;
 import br.com.gabrielle.entities.Pessoa;
 
-import java.sql.SQLException;
 import java.util.List;
 
-public class PessoaService  {
+public class PessoaService {
 
-    public void insert(Pessoa pessoa) throws SQLException {
+    public void insert(Pessoa pessoa) {
         new PessoaDAO().insert(pessoa);
 
     }
 
-    public List<Pessoa> buscarPessoas() {
-        return new PessoaDAO().buscarPessoas();
+    public List<Pessoa> findAll() {
+        return new PessoaDAO().findAll();
 
     }
 

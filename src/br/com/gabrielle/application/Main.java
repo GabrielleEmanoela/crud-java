@@ -4,22 +4,28 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+
+import java.util.Locale;
 
 public class Main extends Application {
 
+
+    public static void main(String[] args) {
+        Locale.setDefault(new Locale("pt", "BR"));
+        launch(args);
+    }
 
     @Override
     public void start(Stage primaryStage) {
 
         try {
+
             Parent parent = FXMLLoader.load(getClass().getResource("../gui/View.fxml"));
-            primaryStage.setTitle("Gerenciamento de Pessoa");
             Scene scene = new Scene(parent);
-            scene.getStylesheets().add(Main.class.getResource("../resources/bootstrap.css").toExternalForm());
+            primaryStage.setTitle("Gerenciamento de Pessoa");
+
+            scene.getStylesheets().add(Main.class.getResource("./bootstrap.css").toExternalForm());
 
             primaryStage.setScene(scene);
             primaryStage.show();
@@ -27,15 +33,11 @@ public class Main extends Application {
             System.out.println(exception.getMessage());
 
         }
-
     }
 
-
-
-
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
+
+
+
 
 

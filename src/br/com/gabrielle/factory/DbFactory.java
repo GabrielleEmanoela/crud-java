@@ -1,8 +1,8 @@
-package br.com.gabrielle.conection;
+package br.com.gabrielle.factory;
 
 import java.sql.*;
 
-public class FactoryConnection {
+public class DbFactory {
 
 
     private static Connection connection = null;
@@ -11,10 +11,10 @@ public class FactoryConnection {
 
     private static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/aplicando_teste";
 
-    public Connection createConnectionMySQL() {
+    public static Connection createConnectionMySQL() {
 
         try {
-          connection = DriverManager.getConnection(DB_URL, DB_USER, PASSWORD);
+            connection = DriverManager.getConnection(DB_URL, DB_USER, PASSWORD);
         } catch (Exception e) {
             System.out.print(e.getMessage());
         }
@@ -22,37 +22,36 @@ public class FactoryConnection {
         return connection;
     }
 
-    public void closeConnection(){
-        if ( connection != null){
+    public static void closeConnection() {
+        if (connection != null) {
             try {
                 connection.close();
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
     }
-   public static void closeStatement(Statement statement){
-        if (statement !=null){
+
+    public static void closeStatement(Statement statement) {
+        if (statement != null) {
             try {
                 statement.close();
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
-   }
-   public static void closeResult(ResultSet resultSet){
-        if (resultSet != null){
+    }
+
+    public static void closeResult(ResultSet resultSet) {
+        if (resultSet != null) {
             try {
                 resultSet.close();
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
-   }
-   //Services
+    }
+
 }
 
 

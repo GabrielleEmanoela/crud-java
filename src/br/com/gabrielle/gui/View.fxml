@@ -12,52 +12,57 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="644.0" prefWidth="801.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.gabrielle.controller.PessoaController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="682.0" prefWidth="1088.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.gabrielle.controller.PessoaController">
    <children>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" />
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
-        <tabs>
-          <Tab text="Criar">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="376.0" prefWidth="633.0">
-                     <children>
-                        <Text layoutX="18.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" wrappingWidth="70.0" />
-                        <TextField fx:id="id" editable="false" layoutX="18.0" layoutY="51.0" />
-                        <Text layoutX="18.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome" wrappingWidth="44.98307228088379" />
-                        <TextField fx:id="nome" layoutX="18.0" layoutY="116.0" />
-                        <Text layoutX="18.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Endereço" />
-                        <TextField fx:id="endereco" layoutX="18.0" layoutY="175.0" />
-                        <Text layoutX="18.0" layoutY="225.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data de Nascimento" />
-                        <DatePicker fx:id="dataNascimento" layoutX="16.0" layoutY="238.0" prefHeight="22.0" prefWidth="153.0" />
-                        <Text layoutX="18.0" layoutY="291.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Telefone" wrappingWidth="84.98307228088379" />
-                        <TextField fx:id="telefone" layoutX="17.0" layoutY="301.0" prefHeight="25.0" prefWidth="152.0" />
-                        <Text layoutX="18.0" layoutY="350.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E-mail" />
-                        <TextField fx:id="email" layoutX="18.0" layoutY="362.0" />
-                        <Button fx:id="btnSalvar" layoutX="69.0" layoutY="411.0" mnemonicParsing="false" onAction="#buttonAction" styleClass="info  " text="Salvar" />
-
-                         <TableView fx:id="tablePessoaView" layoutX="216.0" layoutY="13.0" prefHeight="495.0" prefWidth="531.0" editable="true">
-                          <columns>
-                            <TableColumn fx:id="colId" prefWidth="75.0" text="ID" />
-                            <TableColumn fx:id="colNome" minWidth="75.0" prefWidth="3.0" text="Nome" />
-                              <TableColumn fx:id="colTelefone" prefWidth="75.0" text="Telefone" />
-                              <TableColumn fx:id="colEndereco" prefWidth="75.0" text="Endereço" />
-                              <TableColumn fx:id="colNascimento" prefWidth="75.0" text="Nascimento" />
-                              <TableColumn fx:id="colEmail" prefWidth="75.0" text="Email" />
-                              <TableColumn fx:id="colEmail1" prefWidth="75.0" text="Email" />
-
-                          </columns>
-                        </TableView>
-                        <Button layoutX="612.0" layoutY="516.0" mnemonicParsing="false"  text="Editar" />
-                        <Button layoutX="676.0" layoutY="516.0" mnemonicParsing="false" onAction="#onRemove" text="Remover" />
-
-
-
-
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
-        </tabs>
-      </TabPane>
+      <BorderPane prefHeight="200.0" prefWidth="200.0">
+         <top>
+            <TabPane prefHeight="653.0" prefWidth="818.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+              <tabs>
+                <Tab text="Pessoa">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="376.0" prefWidth="633.0">
+                           <children>
+                              <Text layoutX="18.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" wrappingWidth="70.0" />
+                              <TextField fx:id="id" editable="false" layoutX="18.0" layoutY="51.0" />
+                              <Text layoutX="18.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome" wrappingWidth="44.98307228088379" />
+                              <TextField fx:id="nome" layoutX="18.0" layoutY="116.0" />
+                              <Text layoutX="18.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Endereço" />
+                              <TextField fx:id="endereco" layoutX="18.0" layoutY="175.0" />
+                              <Text layoutX="18.0" layoutY="225.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data de Nascimento" />
+                              <DatePicker fx:id="dataNascimento" layoutX="16.0" layoutY="238.0" prefHeight="22.0" prefWidth="153.0" promptText="DD/MM/YYYY" />
+      
+      
+      
+                               <Text layoutX="18.0" layoutY="291.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Telefone" wrappingWidth="84.98307228088379" />
+                              <TextField fx:id="telefone" layoutX="17.0" layoutY="301.0" prefHeight="25.0" prefWidth="152.0" />
+                              <Text layoutX="18.0" layoutY="350.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E-mail" />
+                              <TextField fx:id="email" layoutX="18.0" layoutY="362.0" />
+                              <Button fx:id="btnSalvar" layoutX="110.0" layoutY="407.0" mnemonicParsing="false" onAction="#onSave" styleClass="info  " text="Salvar" />
+      
+                               <TableView fx:id="tablePessoaView" editable="true" layoutX="216.0" layoutY="13.0" prefHeight="497.0" prefWidth="849.0">
+                                <columns>
+                                  <TableColumn fx:id="colId" prefWidth="55.0" text="ID" />
+                                  <TableColumn fx:id="colNome" minWidth="75.0" prefWidth="194.0" text="Nome" />
+                                    <TableColumn fx:id="colTelefone" prefWidth="113.0" text="Telefone" />
+                                    <TableColumn fx:id="colEndereco" prefWidth="209.0" text="Endereço" />
+                                    <TableColumn fx:id="colNascimento" prefWidth="111.0" text="Nascimento" />
+                                    <TableColumn fx:id="colEmail" prefWidth="165.0" text="Email" />
+      
+                                </columns>
+                              </TableView>
+                              <Button layoutX="917.0" layoutY="529.0" mnemonicParsing="false" onAction="#onEdit" prefHeight="25.0" prefWidth="67.0" text="Editar" />
+                              <Button layoutX="992.0" layoutY="529.0" mnemonicParsing="false" onAction="#onRemove" styleClass="danger" text="Remover" />
+                              <Button fx:id="btnLimpar" layoutX="20.0" layoutY="407.0" mnemonicParsing="false" onAction="#setBtnLimpar" prefHeight="25.0" prefWidth="65.0" text="Limpar" />
+      
+      
+      
+      
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+         </top></BorderPane>
    </children>
 </StackPane>

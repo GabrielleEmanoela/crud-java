@@ -1,12 +1,11 @@
 package br.com.gabrielle.entities;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.scene.control.DatePicker;
+import br.com.gabrielle.dao.PessoaDAO;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Pessoa {
+
+public class Pessoa extends PessoaDAO {
 
 
     private int id;
@@ -15,6 +14,19 @@ public class Pessoa {
     private Date dataNascimento;
     private String telefone;
     private String email;
+
+    public Pessoa(int id, String nome, String endereco, Date dataNascimento, String telefone, String email) {
+        this.id = id;
+        this.nome = nome;
+        this.endereco = endereco;
+        this.dataNascimento = dataNascimento;
+        this.telefone = telefone;
+        this.email = email;
+    }
+
+    public Pessoa() {
+
+    }
 
 
     public int getId() {
@@ -32,6 +44,7 @@ public class Pessoa {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
 
     public String getEndereco() {
         return endereco;
@@ -57,7 +70,6 @@ public class Pessoa {
         this.telefone = telefone;
     }
 
-
     public String getEmail() {
         return email;
     }
@@ -66,28 +78,4 @@ public class Pessoa {
         this.email = email;
     }
 
-
-    public Pessoa(int id, String nome, String endereco, Date dataNascimento, String telefone, String email) {
-        this.id = id;
-        this.nome = nome;
-        this.endereco = endereco;
-        this.dataNascimento = dataNascimento;
-        this.telefone = telefone;
-        this.email = email;
-    }
-
-    public Pessoa() {
-
-    }
-
-    @Override
-    public String toString() {
-        return "pessoa{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", endereco='" + endereco + '\'' +
-                ", dataNascimento=" + dataNascimento +
-                ", telefone=" + telefone +
-                '}';
-    }
 }

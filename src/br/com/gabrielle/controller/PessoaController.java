@@ -2,39 +2,24 @@ package br.com.gabrielle.controller;
 
 import br.com.gabrielle.entities.Pessoa;
 import br.com.gabrielle.gui.util.Alerts;
-import br.com.gabrielle.gui.util.Utils;
 import br.com.gabrielle.service.PessoaService;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
 
-import javax.swing.*;
-import java.io.IOException;
 import java.net.URL;
-import java.sql.*;
-import java.util.List;
-import java.util.Optional;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class PessoaController implements Initializable {
 
-    PessoaService pessoaService;
     @FXML
     private TextField id;
     @FXML
@@ -54,6 +39,8 @@ public class PessoaController implements Initializable {
     @FXML
     private Button btnDelete;
     @FXML
+    private Button btnLimpar;
+    @FXML
     private TableView<Pessoa> tablePessoaView;
     @FXML
     private TableColumn<Pessoa, Integer> colId;
@@ -67,23 +54,51 @@ public class PessoaController implements Initializable {
     private TableColumn<Pessoa, Date> colNascimento;
     @FXML
     private TableColumn<Pessoa, String> colEmail;
-    @FXML
-    private TableColumn<Pessoa, Boolean> edit;
 
 
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        this.formatDatePicker();
+        this.loadValues();
+
+    }
+
     @FXML
-    private void buttonAction() {
+    private void onSave() {
         try {
-            Pessoa pessoa = new Pessoa();
-            pessoa.setNome(nome.getText());
-            pessoa.setEndereco(endereco.getText());
-            pessoa.setDataNascimento(new Date(dataNascimento.getValue().toEpochDay()));
-            pessoa.setTelefone(telefone.getText());
-            pessoa.setEmail(email.getText());
-
             PessoaService pessoaService = new PessoaService();
-            pessoaService.insert(pessoa);
-            loadValues();
+            if (!telefone.getText().isEmpty() && !nome.getText().isEmpty() && !endereco.getText().isEmpty() && !email.getText().isEmpty())
+                if (!id.getText().isEmpty()) {
+                    Pessoa pessoa = new Pessoa();
+                    pessoa.setId(Integer.parseInt(id.getText()));
+                    pessoa.setNome(nome.getText());
+                    pessoa.setEndereco(endereco.getText());
+                    pessoa.setDataNascimento(Date.from(LocalDate.parse(dataNascimento.getValue().toString()).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                    pessoa.setTelefone(telefone.getText());
+                    pessoa.setEmail(email.getText());
+
+                    loadValues();
+                    pessoaService.update(pessoa);
+
+
+                } else {
+                    Pessoa pessoa = new Pessoa();
+                    pessoa.setNome(nome.getText());
+                    pessoa.setEndereco(endereco.getText());
+                    pessoa.setDataNascimento(Date.from(LocalDate.parse(dataNascimento.getValue().toString()).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                    pessoa.setTelefone(telefone.getText());
+                    pessoa.setEmail(email.getText());
+
+
+                    pessoaService.insert(pessoa);
+
+                    loadValues();
+
+
+                }
+            else {
+                Alerts.showAlert("Aconteceu um erro ", null, "Por favor verifique os campos, e entre novamente", javafx.scene.control.Alert.AlertType.ERROR);
+
+            }
 
 
         } catch (Exception exception) {
@@ -95,17 +110,41 @@ public class PessoaController implements Initializable {
     @FXML
     private void onRemove() {
         try {
-            var pessoa = tablePessoaView.getSelectionModel().getSelectedItem();
+            var pessoa = this.tablePessoaView.getSelectionModel().getSelectedItem();
             if (pessoa != null) {
                 if (new PessoaService().delete(pessoa))
                     tablePessoaView.setItems(FXCollections.observableArrayList(tablePessoaView.getItems().filtered(pes -> pes.getId() != pessoa.getId())));
                 else
-                    Alerts.showAlert("Aconteceu um erro", null, "Não foi possível remover, tente novamente.", Alert.AlertType.ERROR);
-            } else Alerts.showAlert("Aconteceu um erro", null, "Nenhuma linha foi selecionada.", Alert.AlertType.ERROR);
+                    Alerts.showAlert("Aconteceu um erro", null, "Não foi possível remover, tente novamente.", javafx.scene.control.Alert.AlertType.ERROR);
+            } else
+                Alerts.showAlert("Aconteceu um erro", null, "Nenhuma linha foi selecionada.", javafx.scene.control.Alert.AlertType.ERROR);
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
+    }
+
+    @FXML
+
+    private void onEdit() {
+        try {
+
+            var pessoa = tablePessoaView.getSelectionModel().getSelectedItem();
+            id.setText(String.valueOf(pessoa.getId()));
+            nome.setText(pessoa.getNome());
+            endereco.setText(pessoa.getEndereco());
+            telefone.setText(pessoa.getTelefone());
+            email.setText(pessoa.getEmail());
+            if (pessoa != null) {
+
+            } else {
+                Alerts.showAlert(" Error ", null, "Não foi possível remover, tente novamente.", javafx.scene.control.Alert.AlertType.ERROR);
+            }
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+
     }
 
     public void loadValues() {
@@ -116,18 +155,49 @@ public class PessoaController implements Initializable {
         colNascimento.setCellValueFactory(new PropertyValueFactory<>("DataNascimento"));
         colTelefone.setCellValueFactory(new PropertyValueFactory<>("telefone"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        var pessoas = new PessoaService().buscarPessoas();
+        var pessoas = new PessoaService().findAll();
 
         tablePessoaView.setItems(FXCollections.observableArrayList(pessoas));
 
     }
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        loadValues();
-        tablePessoaView.setEditable(true);
 
+    private void formatDatePicker() {
+        dataNascimento.setConverter(new StringConverter<LocalDate>() {
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return dateFormatter.format(date);
+                } else {
+                    return "";
+                }
+            }
 
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, dateFormatter);
+                } else {
+                    return null;
+                }
+            }
+
+        });
     }
 
+    public void setBtnLimpar(ActionEvent evt) {
+        nome.clear();
+        endereco.clear();
+        telefone.clear();
+        email.clear();
+        dataNascimento.getEditor().clear();
+    }
 }
+
+
+
+
+
+
+

@@ -1,28 +1,28 @@
 package br.com.gabrielle.dao;
 
-import br.com.gabrielle.conection.FactoryConnection;
+import br.com.gabrielle.factory.DbFactory;
 import br.com.gabrielle.entities.Pessoa;
 
 import java.sql.*;
-   import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PessoaDAO {
 
-    Connection connection = null;
-    ResultSet resultSet = null;
-    PreparedStatement preparedStatement = null;
+    private Connection connection = null;
 
-    //Metodo Inserir.
+
+    public PessoaDAO() {
+        connection = DbFactory.createConnectionMySQL();
+    }
 
     public void insert(Pessoa pessoa) {
-
-        String sql = "INSERT INTO pessoa (nome, endereco, data_nascimento, telefone, email) VALUES (?, ?, ?, ?, ?)";
-
-
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
         try {
-            connection = new FactoryConnection().createConnectionMySQL();
-            preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            String sql = "INSERT INTO pessoa (nome, endereco, data_nascimento, telefone, email) VALUES (?, ?, ?, ?, ?)";
 
+            preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, pessoa.getNome());
             preparedStatement.setString(2, pessoa.getEndereco());
             preparedStatement.setDate(3, new Date(pessoa.getDataNascimento().getTime()));
@@ -42,22 +42,22 @@ public class PessoaDAO {
             System.out.println(exception.getMessage());
 
         } finally {
-            FactoryConnection.closeResult(resultSet);
-            FactoryConnection.closeStatement(preparedStatement);
+            DbFactory.closeResult(resultSet);
+            DbFactory.closeStatement(preparedStatement);
         }
 
 
     }
 
-    //Buscar todos
-    public List<Pessoa> buscarPessoas() {
+    public List<Pessoa> findAll() {
         List<Pessoa> pessoas = new ArrayList<Pessoa>();
-        String sql = "SELECT * FROM pessoa";
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+
         try {
-            connection = new FactoryConnection().createConnectionMySQL();
+            String sql = "SELECT * FROM pessoa";
 
             preparedStatement = connection.prepareStatement(sql);
-
             resultSet = preparedStatement.executeQuery(sql);
 
             while (resultSet.next()) {
@@ -74,46 +74,41 @@ public class PessoaDAO {
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
         } finally {
-            FactoryConnection.closeResult(resultSet);
-            FactoryConnection.closeStatement(preparedStatement);
+            DbFactory.closeResult(resultSet);
+            DbFactory.closeStatement(preparedStatement);
         }
 
         return pessoas;
     }
-    //Metodo Alterar
 
     public boolean update(Pessoa pessoa) {
-        String sql = "UPDATE pessoa SET nome =?, telefone = ?, endereco = ?, email = ?";
-
+        PreparedStatement preparedStatement = null;
         try {
-            connection = new FactoryConnection().createConnectionMySQL();
+            String sql = "UPDATE pessoa SET nome = ?, telefone = ?, endereco = ? WHERE id = ?";
 
-            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, pessoa.getNome());
             preparedStatement.setString(2, pessoa.getTelefone());
-            preparedStatement.setString(3, pessoa.getEndereco());
-            preparedStatement.setString(4, pessoa.getEmail());
-            var rowsAffected = preparedStatement.executeUpdate();
+            preparedStatement.setString(3, pessoa.getEmail());
+            preparedStatement.setString(4, String.valueOf(pessoa.getId()));
 
+            var rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) return true;
 
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
         } finally {
-            FactoryConnection.closeResult(resultSet);
-            FactoryConnection.closeStatement(preparedStatement);
+            DbFactory.closeStatement(preparedStatement);
         }
         return false;
     }
-    // Comando delete.
 
     public boolean delete(Pessoa pessoa) {
+        PreparedStatement preparedStatement = null;
         try {
             String sql = "DELETE FROM pessoa WHERE id = ?";
-            connection = new FactoryConnection().createConnectionMySQL();
 
             preparedStatement = connection.prepareStatement(sql);
-
             preparedStatement.setInt(1, pessoa.getId());
 
             var rowsAffected = preparedStatement.executeUpdate();
@@ -124,12 +119,9 @@ public class PessoaDAO {
             System.out.println(exception.getMessage());
 
         } finally {
-            FactoryConnection.closeResult(resultSet);
-            FactoryConnection.closeStatement(preparedStatement);
+            DbFactory.closeStatement(preparedStatement);
         }
-
         return false;
-
     }
 
 
